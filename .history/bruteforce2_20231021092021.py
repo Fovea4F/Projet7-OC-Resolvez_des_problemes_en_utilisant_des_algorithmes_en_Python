@@ -4,10 +4,13 @@ import pandas as pd
 maxInvestAmount = 500
 
 
+
+
 # brute force: search all solutions compatible with investment limit
 # Return :
 #   - an array of tuples, listing every selected stock needed for the best profit
 #   - the best profit value
+
 def bruteForceKnapSac(stockList, maxInvestment, stockListSelection=[]):
     ''' stockList model : ['stockName', value, valuedProfit]'''
     if stockList:
@@ -26,6 +29,7 @@ def bruteForceKnapSac(stockList, maxInvestment, stockListSelection=[]):
 
 
 # get data from .csv file, create tuple array ('actionName', acquisitionValue, percentProfit)
+
 dataFile = pd.read_csv('./data/list20.csv', sep=';', engine='python')
 
 stockList = []
@@ -33,21 +37,19 @@ valuedStockList = []
 for row in range(len(dataFile)):
     lineTuple = (dataFile.iloc[row, 0], dataFile.iloc[row, 1], dataFile.iloc[row, 2])
     stockList.append(lineTuple)
-
-# transform percent profit in valued profit in tuple array created
 for stock in range(len(stockList)):
     valueStockResult = stockList[stock][1] * (stockList[stock][2] / 100)
     valuedStockList.append((stockList[stock][0], stockList[stock][1], valueStockResult))
 
-# --Main--
+
+# transform percent profit in valued profit
 
 start = perf_counter_ns()
 calculatedActionList, profit = bruteForceKnapSac(valuedStockList, maxInvestAmount)
 end = perf_counter_ns()
-
-# Results display
 print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
 print(f"Temps de calcul par approche force brute: {((end - start)/1e9):.4f}s")
+
 print("="*80)
 print("===              Liste des actions pour un rendement maximal                 ===")
 print("="*80)

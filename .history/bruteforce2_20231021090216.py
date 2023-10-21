@@ -3,22 +3,28 @@ import pandas as pd
 
 maxInvestAmount = 500
 
+'''stockList = [["Action-1", 20, 5], ["Action-2", 30, 10], ["Action-3", 50, 15],
+             ["Action-4", 70, 20], ["Action-5", 60, 17], ["Action-6", 80, 25],
+             ["Action-7", 22, 7], ["Action-8", 26, 11], ["Action-9", 48, 13],
+             ["Action-10", 34, 27], ["Action-11", 42, 17],
+             ["Action-12", 110, 9], ["Action-13", 38, 23],
+             ["Action-14", 14, 1], ["Action-15", 18, 3], ["Action-16", 8, 8],
+             ["Action-17", 4, 12], ["Action-18", 10, 14],
+             ["Action-19", 24, 21], ["Action-20", 114, 18]]'''
+
 
 # brute force: search all solutions compatible with investment limit
-# Return :
-#   - an array of tuples, listing every selected stock needed for the best profit
-#   - the best profit value
 def bruteForceKnapSac(stockList, maxInvestment, stockListSelection=[]):
     ''' stockList model : ['stockName', value, valuedProfit]'''
     if stockList:
-        listStock1, profit1 = bruteForceKnapSac(stockList[1:], maxInvestment, stockListSelection)
+        listVal1, val1 = bruteForceKnapSac(stockList[1:], maxInvestment, stockListSelection)
         val = stockList[0]
         if val[1] <= maxInvestment:
-            listVal2, profit2 = bruteForceKnapSac(stockList[1:], maxInvestment - val[1], stockListSelection + [val])
-            if profit1 < profit2:
-                return listVal2, profit2
+            listVal2, val2 = bruteForceKnapSac(stockList[1:], maxInvestment - val[1], stockListSelection + [val])
+            if val1 < val2:
+                return listVal2, val2
 
-        return listStock1, profit1
+        return listVal1, val1
     else:
         reponse_A = stockListSelection
         reponse_B = sum([i[2] for i in stockListSelection])
@@ -33,21 +39,19 @@ valuedStockList = []
 for row in range(len(dataFile)):
     lineTuple = (dataFile.iloc[row, 0], dataFile.iloc[row, 1], dataFile.iloc[row, 2])
     stockList.append(lineTuple)
-
-# transform percent profit in valued profit in tuple array created
 for stock in range(len(stockList)):
     valueStockResult = stockList[stock][1] * (stockList[stock][2] / 100)
     valuedStockList.append((stockList[stock][0], stockList[stock][1], valueStockResult))
 
-# --Main--
+
+# transform percent profit in valued profit
 
 start = perf_counter_ns()
 calculatedActionList, profit = bruteForceKnapSac(valuedStockList, maxInvestAmount)
 end = perf_counter_ns()
-
-# Results display
 print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
 print(f"Temps de calcul par approche force brute: {((end - start)/1e9):.4f}s")
+
 print("="*80)
 print("===              Liste des actions pour un rendement maximal                 ===")
 print("="*80)
@@ -66,6 +70,4 @@ print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue
 print("="*80)
 print("=== {:<29}{:<6}{:<3}{:<2}{:<2}{:<2}===".format('Bénéfices maximisés attendus : ', round(profit, 2), ' €',
                                                       '| Investissement initial : ', maxInvestAmount, ' € '))
-print("="*80)
-print("=== {:<3}{:<19}{:<7}{:<44}===".format('', 'Temps de calcul : ', round((end - start)/1e9, 4), ' s'))
 print("="*80)
