@@ -67,5 +67,6 @@ print("="*80)
 print("=== {:<29}{:<6}{:<3}{:<2}{:<2}{:<2}===".format('Bénéfices maximisés attendus : ', round(profit, 2), ' €',
                                                       '| Investissement initial : ', maxInvestAmount, ' € '))
 print("="*80)
-print("=== {:<3}{:<19}{:<7}{:<44}===".format('', 'Temps de calcul : ', round((end - start)/1e9, 4), ' s'))
+print("=== {:<3}{:<19}{:<7}{:<10}{:<34}===".format('', 'Temps de calcul : ', round((end - start)/1e9, 4), ' s',
+                                                   ' | Méthode : \"force brute\"'))
 print("="*80)
