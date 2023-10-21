@@ -58,8 +58,8 @@ calculatedActionList, profit = dynamicKnapSac(valuedStockList, maxInvestAmount)
 end = perf_counter_ns()
 
 # Results display
-print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
-print(f"Temps de calcul par approche force brute: {((end - start)/1e9):.4f}s")
+# print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
+# print(f"Temps de calcul par approche force brute: {((end - start)/1e9):.4f}s")
 print("="*80)
 print("===              Liste des actions pour un rendement maximal                 ===")
 print("="*80)
