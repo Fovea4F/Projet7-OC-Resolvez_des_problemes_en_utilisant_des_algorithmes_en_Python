@@ -57,9 +57,12 @@ for stock in range(len(stockList)):
 start = perf_counter_ns()
 calculatedActionList, profit = dynamicKnapSac(valuedStockList, maxInvestAmount)
 end = perf_counter_ns()
-totalInvestment = 0
+sortedCalculatedActionList = []
 for index in range(len(calculatedActionList)):
-    totalInvestment += calculatedActionList[index][1]
+    sortedCalculatedActionList.append(calculatedActionList.pop())
+totalInvestment = 0
+for index in range(len(sortedCalculatedActionList)):
+    totalInvestment += sortedCalculatedActionList[index][1]
 
 
 # Results display
@@ -70,15 +73,15 @@ print("===              Liste des actions pour un rendement maximal             
 print("="*80)
 print("=== {:<28}{:<28}{:<17}===".format("Nom de l'action", "Acquisition (en €)", "Bénéfices en €"))
 print("="*80)
-for row in range(len(calculatedActionList)-1):
-    stockName = calculatedActionList[row][0]
-    stockValue = calculatedActionList[row][1]
-    stockProfit = calculatedActionList[row][2]
+for row in range(len(sortedCalculatedActionList)-1):
+    stockName = sortedCalculatedActionList[row][0]
+    stockValue = sortedCalculatedActionList[row][1]
+    stockProfit = sortedCalculatedActionList[row][2]
     print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue, ' €', round(stockProfit, 2), ' €'))
     print(f"==={'-'*74}===")
-stockName = calculatedActionList[row+1][0]
-stockValue = calculatedActionList[row+1][1]
-stockProfit = calculatedActionList[row+1][2]
+stockName = sortedCalculatedActionList[row+1][0]
+stockValue = sortedCalculatedActionList[row+1][1]
+stockProfit = sortedCalculatedActionList[row+1][2]
 print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue, ' €', round(stockProfit, 2), ' €'))
 print("="*80)
 print("=== {:<29}{:<6}{:<3}{:<2}{:<2}{:<2}===".format('Bénéfices maximisés attendus : ', round(profit, 2), ' €',
