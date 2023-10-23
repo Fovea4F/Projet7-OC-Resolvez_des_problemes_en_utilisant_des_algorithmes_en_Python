@@ -44,6 +44,9 @@ for stock in range(len(stockList)):
 start = perf_counter_ns()
 calculatedActionList, profit = bruteForceKnapSac(valuedStockList, maxInvestAmount)
 end = perf_counter_ns()
+totalInvestment = 0
+for index in range(len(calculatedActionList)):
+    totalInvestment += calculatedActionList[index][1]
 
 # Results display
 # print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
@@ -65,7 +68,7 @@ stockProfit = calculatedActionList[row+1][2]
 print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue, ' €', round(stockProfit, 2), ' €'))
 print("="*80)
 print("=== {:<29}{:<6}{:<3}{:<2}{:<2}{:<2}===".format('Bénéfices maximisés attendus : ', round(profit, 2), ' €',
-                                                      '| Investissement initial : ', maxInvestAmount, ' € '))
+                                                      '| Investissement initial : ', totalInvestment, ' € '))
 print("="*80)
 print("=== {:<3}{:<19}{:<7}{:<10}{:<34}===".format('', 'Temps de calcul : ', round((end - start)/1e9, 4), ' s',
                                                    ' | Méthode : \"force brute\"'))

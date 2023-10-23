@@ -7,8 +7,9 @@ maxInvestAmount = 500
 # Ideal Solution Dynamic programmation
 def dynamicKnapSac(stockList, maxInvestment):
     # initialize a zeroed matrix
-    matrix = [[0 for index in range(maxInvestment + 1)] for index in range(len(stockList) + 1)]
+    matrix = [[0.0 for index in range(maxInvestment + 1)] for index in range(len(stockList) + 1)]
 
+    # Fullfill matrix with imported values from file
     for i in range(1, len(stockList) + 1):
         for limitInvest in range(1, maxInvestment + 1):
             if stockList[i-1][1] <= limitInvest:
@@ -56,6 +57,10 @@ for stock in range(len(stockList)):
 start = perf_counter_ns()
 calculatedActionList, profit = dynamicKnapSac(valuedStockList, maxInvestAmount)
 end = perf_counter_ns()
+totalInvestment = 0
+for index in range(len(calculatedActionList)):
+    totalInvestment += calculatedActionList[index][1]
+
 
 # Results display
 # print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
@@ -77,7 +82,7 @@ stockProfit = calculatedActionList[row+1][2]
 print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue, ' €', round(stockProfit, 2), ' €'))
 print("="*80)
 print("=== {:<29}{:<6}{:<3}{:<2}{:<2}{:<2}===".format('Bénéfices maximisés attendus : ', round(profit, 2), ' €',
-                                                      '| Investissement initial : ', maxInvestAmount, ' € '))
+                                                      '| Investissement initial : ', totalInvestment, ' € '))
 print("="*80)
 print("=== {:<3}{:<19}{:<7}{:<10}{:<34}===".format('', 'Temps de calcul : ', round((end - start)/1e9, 4), ' s',
                                                    ' | Méthode :   \"optimizée\" '))
