@@ -7,30 +7,29 @@ maxInvestAmount = 500
 # Ideal Solution Dynamic programmation
 def dynamicKnapSac(stockList, maxInvestment):
     # initialize a zeroed matrix
-    matrix = [[0.0 for index in range(maxInvestment + 1)] for index in range(len(stockList) + 1)]
+    matrix = [[0 for index in range(maxInvestment + 1)] for index in range(len(stockList) + 1)]
 
-    # Fullfill matrix with imported values from file
+    # Fulfill matrix with imported values from file
     for i in range(1, len(stockList) + 1):
-        for limitInvest in range(1, maxInvestment + 1):
-            if stockList[i-1][1] <= limitInvest:
-                matrix[i][limitInvest] = max(stockList[i-1][2]
-                                             + matrix[i-1][limitInvest-stockList[i-1][1]],
-                                             matrix[i-1][limitInvest])
+        for investAmount in range(1, maxInvestment + 1):
+            if stockList[i-1][1] <= investAmount:
+                matrix[i][investAmount] = max(stockList[i-1][2] + matrix[i-1][investAmount-stockList[i-1][1]],
+                                              matrix[i-1][investAmount])
             else:
-                matrix[i][limitInvest] = matrix[i-1][limitInvest]
+                matrix[i][investAmount] = matrix[i-1][investAmount]
 
-    limitInvest = maxInvestment
+    capacityInvest = maxInvestment
     stockListNumber = len(stockList)
     selectedStockList = []
 
-    while limitInvest >= 0 and stockListNumber >= 0:
+    while capacityInvest >= 0 and stockListNumber >= 0:
         currentProcessedStock = stockList[stockListNumber-1]
-        if (matrix[stockListNumber][limitInvest]
-            == matrix[stockListNumber-1][limitInvest-currentProcessedStock[1]]
+        if (matrix[stockListNumber][capacityInvest]
+            == matrix[stockListNumber-1][capacityInvest-currentProcessedStock[1]]
                 + currentProcessedStock[2]):
 
             selectedStockList.append(currentProcessedStock)
-            limitInvest -= currentProcessedStock[1]
+            capacityInvest -= currentProcessedStock[1]
 
         stockListNumber -= 1
     profit = matrix[-1][-1]
@@ -41,7 +40,7 @@ def dynamicKnapSac(stockList, maxInvestment):
 # --Main--
 
 # get data from .csv file, create tuple array ('actionName', acquisitionValue, percentProfit)
-dataFile = pd.read_csv('./data/list20.csv', sep=';', engine='python')
+dataFile = pd.read_csv('./data/list20.csv', sep=',', engine='python')
 
 stockList = []
 valuedStockList = []
@@ -68,25 +67,28 @@ for index in range(len(sortedCalculatedActionList)):
 # Results display
 # print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
 # print(f"Temps de calcul par approche force brute: {((end - start)/1e9):.4f}s")
-print("="*80)
-print("===              Liste des actions pour un rendement maximal                 ===")
-print("="*80)
-print("=== {:<28}{:<28}{:<17}===".format("Nom de l'action", "Acquisition (en €)", "Bénéfices en €"))
-print("="*80)
+print("="*86)
+print("==={:>61}{:>19}===".format("Liste des actions pour un rendement maximal", ""))
+print("="*86)
+print("==={:>17}{:>31}{:>26}{:>6}===".format("Nom de l'action", "Acquisition (en €)", "Bénéfices (en €)", ""))
+print("="*86)
 for row in range(len(sortedCalculatedActionList)-1):
     stockName = sortedCalculatedActionList[row][0]
     stockValue = sortedCalculatedActionList[row][1]
     stockProfit = sortedCalculatedActionList[row][2]
-    print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue, ' €', round(stockProfit, 2), ' €'))
-    print(f"==={'-'*74}===")
+    print("==={:>14}{:>28}{:>2}{:>24}{:>2}{:>10}===".format(stockName, f"{stockValue:.2f}", ' €',
+                                                            f"{stockProfit:.2f}", ' €', ''))
+    print(f"==={'-'*80}===")
 stockName = sortedCalculatedActionList[row+1][0]
 stockValue = sortedCalculatedActionList[row+1][1]
 stockProfit = sortedCalculatedActionList[row+1][2]
-print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue, ' €', round(stockProfit, 2), ' €'))
-print("="*80)
-print("=== {:<29}{:<6}{:<3}{:<2}{:<2}{:<2}===".format('Bénéfices maximisés attendus : ', round(profit, 2), ' €',
-                                                      '| Investissement initial : ', totalInvestment, ' € '))
-print("="*80)
-print("=== {:<3}{:<19}{:<7}{:<10}{:<34}===".format('', 'Temps de calcul : ', round((end - start)/1e9, 4), ' s',
-                                                   ' | Méthode :   \"optimizée\" '))
-print("="*80)
+print("==={:>14}{:>28}{:>2}{:>24}{:>2}{:>10}===".format(stockName, f"{stockValue:.2f}", ' €',
+                                                        f"{stockProfit:.2f}", ' €', ''))
+print("="*86)
+print("==={:>31}{:>9}{:>2}{:>27}{:>8}{:>1}{:>1}===".format(' Bénéfices maximisés attendus : ', f"{profit:.2f}", ' €',
+                                                           '| Investissement initial : ',
+                                                           f"{totalInvestment:.2f}", '€', ''))
+print("="*86)
+print("==={:>22}{:>11}{:>2}{:>33}{:>12}===".format('Temps de calcul : ', f"{(end - start)/1e9:.4f}", ' s',
+                                                   ' | Méthode :   \"optimisée\" ', ''))
+print("="*86)

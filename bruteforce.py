@@ -60,7 +60,8 @@ for row in range(len(calculatedActionList)-1):
     stockName = calculatedActionList[row][0]
     stockValue = calculatedActionList[row][1]
     stockProfit = calculatedActionList[row][2]
-    print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue, ' €', round(stockProfit, 2), ' €'))
+    print("=== {:<3}{:<31}{:<3}{:<24}{:<9}{:<3}===".format('', stockName, stockValue, ' €',
+                                                           round(stockProfit, 2), ' €'))
     print(f"==={'-'*74}===")
 stockName = calculatedActionList[row+1][0]
 stockValue = calculatedActionList[row+1][1]
