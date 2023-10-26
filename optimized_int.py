@@ -42,6 +42,7 @@ def knapSack(stockList, maxInvestment):
 
 # --Main--
 
+start = perf_counter_ns()
 # get data from .csv file, create tuple array ('actionName', acquisitionValue, percentProfit)
 dataFile = pd.read_csv(inputFile, sep=',', engine='python')
 
@@ -56,7 +57,7 @@ for stock in range(len(stockList)):
     valueStockPerf = stockList[stock][1] * (stockList[stock][2] / 100)
     valuedStockList.append((stockList[stock][0], stockList[stock][1], valueStockPerf))
 
-start = perf_counter_ns()
+# start = perf_counter_ns()
 calculatedActionList, profit = knapSack(valuedStockList, maxInvestAmount)
 end = perf_counter_ns()
 reOrderedCalculatedActionList = []
