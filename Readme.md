@@ -15,4 +15,4 @@
 1. Le programme __bruteforce.py__ teste toutes les possibilités valides.
 2. Le programme __optimized.py__ modifie l'approche de la problématique afin de diminuer la valeur temporelle et spatiale de "__Big O__', par la mise en œuvre de matrices permettant la capitalisation  des résultats précédents, sans charge supplémentaire des ressources.
 
-Les programmes affichent le résultat sous forme de tableau et indiquent également le temps de calcul.
+Les programmes affichent le résultat sous forme de tableau et indiquent également le temps de calcul total et au prorata du nombre d'actions à prendre en charge.

@@ -2,19 +2,20 @@ from time import perf_counter_ns
 import pandas as pd
 
 maxInvestAmount = 500
+inputFile = './data/list20.csv'
 
 
 # brute force: search all solutions compatible with investment limit
 # Return :
 #   - an array of tuples, listing every selected stock needed for the best profit
 #   - the best profit value
-def bruteForceKnapSac(stockList, maxInvestment, stockListSelection=[]):
+def knapSack(stockList, maxInvestment, stockListSelection=[]):
     ''' stockList model : ['stockName', value, valuedProfit]'''
     if stockList:
-        listStock1, profit1 = bruteForceKnapSac(stockList[1:], maxInvestment, stockListSelection)
+        listStock1, profit1 = knapSack(stockList[1:], maxInvestment, stockListSelection)
         val = stockList[0]
         if val[1] <= maxInvestment:
-            listVal2, profit2 = bruteForceKnapSac(stockList[1:], maxInvestment - val[1], stockListSelection + [val])
+            listVal2, profit2 = knapSack(stockList[1:], maxInvestment - val[1], stockListSelection + [val])
             if profit1 < profit2:
                 return listVal2, profit2
 
@@ -26,7 +27,7 @@ def bruteForceKnapSac(stockList, maxInvestment, stockListSelection=[]):
 
 
 # get data from .csv file, create tuple array ('actionName', acquisitionValue, percentProfit)
-dataFile = pd.read_csv('./data/list20.csv', sep=';', engine='python')
+dataFile = pd.read_csv(inputFile, sep=',', engine='python')
 
 stockList = []
 valuedStockList = []
@@ -42,7 +43,7 @@ for stock in range(len(stockList)):
 # --Main--
 
 start = perf_counter_ns()
-calculatedActionList, profit = bruteForceKnapSac(valuedStockList, maxInvestAmount)
+calculatedActionList, profit = knapSack(valuedStockList, maxInvestAmount)
 end = perf_counter_ns()
 totalInvestment = 0
 for index in range(len(calculatedActionList)):

@@ -1,22 +1,27 @@
+'''knapSack algorithm usage
+   You need to adapt inputFile variable to your environment
+'''
+
 from time import perf_counter_ns
 import pandas as pd
 
 maxInvestAmount = 500
+inputFile = './data/list20.csv'
 
 
 # Ideal Solution Dynamic programmation
-def dynamicKnapSac(stockList, maxInvestment):
+def knapSack(stockList, maxInvestment):
     # initialize a zeroed matrix
     matrix = [[0 for index in range(maxInvestment + 1)] for index in range(len(stockList) + 1)]
 
     # Fulfill matrix with imported values from file
     for i in range(1, len(stockList) + 1):
-        for investAmount in range(1, maxInvestment + 1):
-            if stockList[i-1][1] <= investAmount:
-                matrix[i][investAmount] = max(stockList[i-1][2] + matrix[i-1][investAmount-stockList[i-1][1]],
-                                              matrix[i-1][investAmount])
+        for limitInvest in range(1, maxInvestment + 1):
+            if stockList[i-1][1] <= limitInvest:
+                matrix[i][limitInvest] = max(stockList[i-1][2] + matrix[i-1][limitInvest-stockList[i-1][1]],
+                                             matrix[i-1][limitInvest])
             else:
-                matrix[i][investAmount] = matrix[i-1][investAmount]
+                matrix[i][limitInvest] = matrix[i-1][limitInvest]
 
     capacityInvest = maxInvestment
     stockListNumber = len(stockList)
@@ -40,48 +45,57 @@ def dynamicKnapSac(stockList, maxInvestment):
 # --Main--
 
 # get data from .csv file, create tuple array ('actionName', acquisitionValue, percentProfit)
-dataFile = pd.read_csv('./data/list20.csv', sep=',', engine='python')
+dataFile = pd.read_csv(inputFile, sep=',', engine='python')
+# It is obviously illogical to get shares for free or at a negative price, certainly due to errors, I reject these lines
+filter = dataFile['price'] > 0
 
+filteredDataFile = dataFile[filter]
+# print(filteredDataFile)
 stockList = []
 valuedStockList = []
-for row in range(len(dataFile)):
-    lineTuple = (dataFile.iloc[row, 0], dataFile.iloc[row, 1], dataFile.iloc[row, 2])
+for row in range(len(filteredDataFile)):
+    lineTuple = (filteredDataFile.iloc[row, 0], filteredDataFile.iloc[row, 1], filteredDataFile.iloc[row, 2])
     stockList.append(lineTuple)
 
-# transform percent profit in valued profit in tuple array created
+# transform stock value from decimal to integer, to be compatible to knapSack algorithm
 for stock in range(len(stockList)):
     valueStockPerf = stockList[stock][1] * (stockList[stock][2] / 100)
-    valuedStockList.append((stockList[stock][0], stockList[stock][1], valueStockPerf))
+    valueStock = int(stockList[stock][1] * 100)
+    valuedStockList.append((stockList[stock][0], valueStock, valueStockPerf))
 
 start = perf_counter_ns()
-calculatedActionList, profit = dynamicKnapSac(valuedStockList, maxInvestAmount)
+# The amount of maxInvest is multiplied by 100 to remain consistent with the transformation of the share value
+calculatedActionList, profit = knapSack(valuedStockList, maxInvestAmount * 100)
 end = perf_counter_ns()
-sortedCalculatedActionList = []
+
+reOrderedCalculatedActionList = []
 for index in range(len(calculatedActionList)):
-    sortedCalculatedActionList.append(calculatedActionList.pop())
+    tmpValue = calculatedActionList.pop()
+    value = (tmpValue[0], tmpValue[1]/100, tmpValue[2])
+    reOrderedCalculatedActionList.append(value)
 totalInvestment = 0
-for index in range(len(sortedCalculatedActionList)):
-    totalInvestment += sortedCalculatedActionList[index][1]
+for index in range(len(reOrderedCalculatedActionList)):
+    totalInvestment += reOrderedCalculatedActionList[index][1]
+print((f"longueur liste : {len(reOrderedCalculatedActionList)}"))
 
-
+# -----------------------------------------------------------------------------------------
 # Results display
-# print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
-# print(f"Temps de calcul par approche force brute: {((end - start)/1e9):.4f}s")
+# -----------------------------------------------------------------------------------------
 print("="*86)
 print("==={:>61}{:>19}===".format("Liste des actions pour un rendement maximal", ""))
 print("="*86)
 print("==={:>17}{:>31}{:>26}{:>6}===".format("Nom de l'action", "Acquisition (en €)", "Bénéfices (en €)", ""))
 print("="*86)
-for row in range(len(sortedCalculatedActionList)-1):
-    stockName = sortedCalculatedActionList[row][0]
-    stockValue = sortedCalculatedActionList[row][1]
-    stockProfit = sortedCalculatedActionList[row][2]
+for row in range(len(reOrderedCalculatedActionList)-1):
+    stockName = reOrderedCalculatedActionList[row][0]
+    stockValue = reOrderedCalculatedActionList[row][1]
+    stockProfit = reOrderedCalculatedActionList[row][2]
     print("==={:>14}{:>28}{:>2}{:>24}{:>2}{:>10}===".format(stockName, f"{stockValue:.2f}", ' €',
                                                             f"{stockProfit:.2f}", ' €', ''))
     print(f"==={'-'*80}===")
-stockName = sortedCalculatedActionList[row+1][0]
-stockValue = sortedCalculatedActionList[row+1][1]
-stockProfit = sortedCalculatedActionList[row+1][2]
+stockName = reOrderedCalculatedActionList[row+1][0]
+stockValue = reOrderedCalculatedActionList[row+1][1]
+stockProfit = reOrderedCalculatedActionList[row+1][2]
 print("==={:>14}{:>28}{:>2}{:>24}{:>2}{:>10}===".format(stockName, f"{stockValue:.2f}", ' €',
                                                         f"{stockProfit:.2f}", ' €', ''))
 print("="*86)
@@ -89,6 +103,7 @@ print("==={:>31}{:>9}{:>2}{:>27}{:>8}{:>1}{:>1}===".format(' Bénéfices maximis
                                                            '| Investissement initial : ',
                                                            f"{totalInvestment:.2f}", '€', ''))
 print("="*86)
-print("==={:>22}{:>11}{:>2}{:>33}{:>12}===".format('Temps de calcul : ', f"{(end - start)/1e9:.4f}", ' s',
-                                                   ' | Méthode :   \"optimisée\" ', ''))
+print("==={:>28}{:>7}{:>3}{:>8}{:>24}{:>1}===".format(' Temps de calcul => Total :', f"{(end - start)/1e9:.3f}", 's |',
+                                                      f"{(end - start)/(len(valuedStockList))/1e6:.4f}",
+                                                      'ms/action | Méthode : "optimisée"', ''))
 print("="*86)
