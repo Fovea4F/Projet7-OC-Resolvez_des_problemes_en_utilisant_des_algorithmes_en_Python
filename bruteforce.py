@@ -9,6 +9,7 @@ inputFile = './data/list20.csv'
 # Return :s
 #   - an array of tuple, listing every selected stock needed for the best profit
 #   - the best profit value
+
 def knapSack(stockList, maxInvestment, stockListSelection=[]):
     ''' stockList model : ['stockName', value, valuedProfit]'''
     if stockList:
@@ -40,7 +41,9 @@ for stock in range(len(stockList)):
     valueStockResult = stockList[stock][1] * (stockList[stock][2] / 100)
     valuedStockList.append((stockList[stock][0], stockList[stock][1], valueStockResult))
 
-# --Main--
+# -------------------------------------------------------------------------------------------------------------
+# -- Main --
+# -------------------------------------------------------------------------------------------------------------
 
 start = perf_counter_ns()
 calculatedActionList, profit = knapSack(valuedStockList, maxInvestAmount)
