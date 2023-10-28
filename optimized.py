@@ -42,7 +42,9 @@ def knapSack(stockList, maxInvestment):
     return selectedStockList, profit
 
 
-# --Main--
+# -----------------------------------------------------------------------------------------------------------
+# -- Main --
+# -----------------------------------------------------------------------------------------------------------
 
 # get data from .csv file, create tuple array ('actionName', acquisitionValue, percentProfit)
 dataFile = pd.read_csv(inputFile, sep=',', engine='python')
@@ -71,6 +73,7 @@ end = perf_counter_ns()
 reOrderedCalculatedActionList = []
 for index in range(len(calculatedActionList)):
     tmpValue = calculatedActionList.pop()
+    # reassign good value to weight
     value = (tmpValue[0], tmpValue[1]/100, tmpValue[2])
     reOrderedCalculatedActionList.append(value)
 totalInvestment = 0
@@ -78,9 +81,8 @@ for index in range(len(reOrderedCalculatedActionList)):
     totalInvestment += reOrderedCalculatedActionList[index][1]
 print((f"longueur liste : {len(reOrderedCalculatedActionList)}"))
 
-# -----------------------------------------------------------------------------------------
 # Results display
-# -----------------------------------------------------------------------------------------
+
 print("="*86)
 print("==={:>61}{:>19}===".format("Liste des actions pour un rendement maximal", ""))
 print("="*86)

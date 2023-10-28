@@ -6,8 +6,8 @@ inputFile = './data/list20.csv'
 
 
 # brute force: search all solutions compatible with investment limit
-# Return :
-#   - an array of tuples, listing every selected stock needed for the best profit
+# Return :s
+#   - an array of tuple, listing every selected stock needed for the best profit
 #   - the best profit value
 def knapSack(stockList, maxInvestment, stockListSelection=[]):
     ''' stockList model : ['stockName', value, valuedProfit]'''
