@@ -12,33 +12,34 @@ inputFile = './data/list20.csv'
 # Ideal Solution Dynamic programmation
 def knapSack(stockList, maxInvestment):
     # initialize a zeroed matrix
-    matrix = [[0 for index in range(maxInvestment + 1)] for index in range(len(stockList) + 1)]
+    array = [[0 for index in range(maxInvestment + 1)] for index in range(len(stockList) + 1)]
 
-    # Fulfill matrix with imported values from file
+    # Calculate profit for every weight, when adding an element to array
     for i in range(1, len(stockList) + 1):
-        for limitInvest in range(1, maxInvestment + 1):
-            if stockList[i-1][1] <= limitInvest:
-                matrix[i][limitInvest] = max(stockList[i-1][2] + matrix[i-1][limitInvest-stockList[i-1][1]],
-                                             matrix[i-1][limitInvest])
+        for invest in range(1, maxInvestment + 1):
+            if stockList[i-1][1] <= invest:
+                array[i][invest] = max(stockList[i-1][2] + array[i-1][invest-stockList[i-1][1]],
+                                       array[i-1][invest])
             else:
-                matrix[i][limitInvest] = matrix[i-1][limitInvest]
+                array[i][invest] = array[i-1][invest]
 
     capacityInvest = maxInvestment
     stockListNumber = len(stockList)
     selectedStockList = []
 
+    # build selected stock list from precedent array
     while capacityInvest >= 0 and stockListNumber >= 0:
         currentProcessedStock = stockList[stockListNumber-1]
-        if (matrix[stockListNumber][capacityInvest]
-            == matrix[stockListNumber-1][capacityInvest-currentProcessedStock[1]]
+        if (array[stockListNumber][capacityInvest]
+            == array[stockListNumber-1][capacityInvest-currentProcessedStock[1]]
                 + currentProcessedStock[2]):
 
             selectedStockList.append(currentProcessedStock)
             capacityInvest -= currentProcessedStock[1]
 
         stockListNumber -= 1
-    profit = matrix[-1][-1]
 
+    profit = array[-1][-1]
     return selectedStockList, profit
 
 

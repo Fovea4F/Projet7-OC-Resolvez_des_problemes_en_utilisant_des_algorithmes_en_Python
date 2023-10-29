@@ -2,7 +2,7 @@ from time import perf_counter_ns
 import pandas as pd
 
 maxInvestAmount = 500
-inputFile = './data/list20.csv'
+inputFile = './data/list4.csv'
 
 
 # brute force: search all solutions compatible with investment limit
@@ -14,18 +14,23 @@ def knapSack(stockList, maxInvestment, stockListSelection=[]):
     ''' stockList model : ['stockName', value, valuedProfit]'''
     if stockList:
         listStock1, profit1 = knapSack(stockList[1:], maxInvestment, stockListSelection)
-        val = stockList[0]
-        if val[1] <= maxInvestment:
-            listVal2, profit2 = knapSack(stockList[1:], maxInvestment - val[1], stockListSelection + [val])
+        element = stockList[0]
+        # can object be inserted in KnapSac ?
+        if element[1] <= maxInvestment:
+            listVal2, profit2 = knapSack(stockList[1:], maxInvestment - element[1], stockListSelection + [element])
             if profit1 < profit2:
                 return listVal2, profit2
 
         return listStock1, profit1
-    else:
-        reponse_A = stockListSelection
-        reponse_B = sum([i[2] for i in stockListSelection])
-        return reponse_A, reponse_B
 
+    else:
+        finalProfit = sum([i[2] for i in stockListSelection])
+        return stockListSelection, finalProfit
+
+
+# -------------------------------------------------------------------------------------------------------------
+# -- Main --
+# -------------------------------------------------------------------------------------------------------------
 
 # get data from .csv file, create tuple array ('actionName', acquisitionValue, percentProfit)
 dataFile = pd.read_csv(inputFile, sep=',', engine='python')
@@ -40,10 +45,6 @@ for row in range(len(dataFile)):
 for stock in range(len(stockList)):
     valueStockResult = stockList[stock][1] * (stockList[stock][2] / 100)
     valuedStockList.append((stockList[stock][0], stockList[stock][1], valueStockResult))
-
-# -------------------------------------------------------------------------------------------------------------
-# -- Main --
-# -------------------------------------------------------------------------------------------------------------
 
 start = perf_counter_ns()
 calculatedActionList, profit = knapSack(valuedStockList, maxInvestAmount)
