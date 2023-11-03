@@ -7,8 +7,9 @@
 
 ## Mise en place des environnements
 
-1. Télécharger les sources dans le format zip proposé
-2. Depuis votre environnement, lancer la commande "__pip install -r requirements.txt__" afin de générer un environnement virtuel approprié.
+1. Installer un environnement virtuel dans votre dossier de travail "__python -m venv env__"
+2. Télécharger les sources dans le format zip proposé et les décompacter dans votre dossier de travail
+3. Depuis votre environnement, lancer la commande "__pip install -r requirements.txt__" afin de générer un environnement virtuel approprié.
 
 ## Utilisation
 
