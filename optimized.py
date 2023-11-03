@@ -6,7 +6,7 @@ from time import perf_counter_ns
 import pandas as pd
 
 maxInvestAmount = 500
-inputFile = './data/dataset2_Python_P7.csv'
+inputFile = './data/list20.csv'
 
 
 # Ideal Solution Dynamic programmation
