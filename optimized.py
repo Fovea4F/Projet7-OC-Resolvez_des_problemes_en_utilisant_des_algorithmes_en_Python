@@ -6,7 +6,7 @@ from time import perf_counter_ns
 import pandas as pd
 
 maxInvestAmount = 500
-inputFile = './data/list20.csv'
+inputFile = './data/dataset2_Python_P7.csv'
 
 
 # Ideal Solution Dynamic programmation
@@ -46,6 +46,7 @@ def knapSack(stockList, maxInvestment):
 # -----------------------------------------------------------------------------------------------------------
 # -- Main --
 # -----------------------------------------------------------------------------------------------------------
+
 
 # get data from .csv file, create tuple array ('actionName', acquisitionValue, percentProfit)
 dataFile = pd.read_csv(inputFile, sep=',', engine='python')
