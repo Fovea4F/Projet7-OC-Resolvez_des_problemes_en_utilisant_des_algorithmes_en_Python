@@ -2,7 +2,7 @@ from time import perf_counter_ns
 import pandas as pd
 
 maxInvestAmount = 500
-inputFile = './data/list4.csv'
+inputFile = './data/list20.csv'
 
 
 # brute force: search all solutions compatible with investment limit
@@ -56,11 +56,16 @@ for index in range(len(calculatedActionList)):
 # Results display
 # print(f"Liste optimisée d'investissement : {calculatedActionList}, bénéfice réalisé attendu : {profit:.2f}€")
 # print(f"Temps de calcul par approche force brute: {((end - start)/1e9):.4f}s")
-print("="*80)
+'''print("="*80)
 print("===              Liste des actions pour un rendement maximal                 ===")
 print("="*80)
 print("=== {:<28}{:<28}{:<17}===".format("Nom de l'action", "Acquisition (en €)", "Bénéfices en €"))
-print("="*80)
+print("="*80)'''
+'''print("="*86)
+print("==={:>61}{:>19}===".format("Liste des actions pour un rendement maximal", ""))
+print("="*86)
+print("==={:>17}{:>31}{:>26}{:>6}===".format("Nom de l'action", "Acquisition (en €)", "Bénéfices (en €)", ""))
+print("="*86)
 for row in range(len(calculatedActionList)-1):
     stockName = calculatedActionList[row][0]
     stockValue = calculatedActionList[row][1]
@@ -78,4 +83,30 @@ print("=== {:<29}{:<6}{:<3}{:<2}{:<2}{:<2}===".format('Bénéfices maximisés at
 print("="*80)
 print("=== {:<3}{:<19}{:<7}{:<10}{:<34}===".format('', 'Temps de calcul : ', round((end - start)/1e9, 4), ' s',
                                                    ' | Méthode : \"force brute\"'))
-print("="*80)
+print("="*80)'''
+print("="*86)
+print("==={:>61}{:>19}===".format("Liste des actions pour un rendement maximal", ""))
+print("="*86)
+print("==={:>17}{:>31}{:>26}{:>6}===".format("Nom de l'action", "Acquisition (en €)", "Bénéfices (en €)", ""))
+print("="*86)
+for row in range(len(calculatedActionList)-1):
+    stockName = calculatedActionList[row][0]
+    stockValue = calculatedActionList[row][1]
+    stockProfit = calculatedActionList[row][2]
+    print("==={:>14}{:>28}{:>2}{:>24}{:>2}{:>10}===".format(stockName, f"{stockValue:.2f}", ' €',
+                                                            f"{stockProfit:.2f}", ' €', ''))
+    print(f"==={'-'*80}===")
+stockName = calculatedActionList[row+1][0]
+stockValue = calculatedActionList[row+1][1]
+stockProfit = calculatedActionList[row+1][2]
+print("==={:>14}{:>28}{:>2}{:>24}{:>2}{:>10}===".format(stockName, f"{stockValue:.2f}", ' €',
+                                                        f"{stockProfit:.2f}", ' €', ''))
+print("="*86)
+print("==={:>31}{:>9}{:>2}{:>27}{:>8}{:>1}{:>1}===".format(' Bénéfices maximisés attendus : ', f"{profit:.2f}", ' €',
+                                                           '| Investissement initial : ',
+                                                           f"{totalInvestment:.2f}", '€', ''))
+print("="*86)
+print("==={:>28}{:>7}{:>3}{:>8}{:>24}{:>1}===".format(' Temps de calcul => Total :', f"{(end - start)/1e9:.3f}", 's |',
+                                                      f"{(end - start)/(len(valuedStockList))/1e6:.4f}",
+                                                      'ms/action | Méthode : force brute', ''))
+print("="*86)
